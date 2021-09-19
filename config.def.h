@@ -123,31 +123,30 @@ float alpha = 0.8;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	"black",
-	"red3",
-	"green3",
-	"yellow3",
-	"blue2",
-	"magenta3",
-	"cyan3",
-	"gray90",
+	"#1B2229", /* black   */
+	"#ff6c6b", /* red     */
+	"#98be65", /* green   */
+	"#ECBE7B", /* yellow  */
+	"#51afef", /* blue    */
+	"#a9a1e1", /* magenta */
+	"#46D9FF", /* cyan    */
+	"#efefef", /* white   */
 
 	/* 8 bright colors */
-	"gray50",
-	"red",
-	"green",
-	"yellow",
-	"#5c5cff",
-	"magenta",
-	"cyan",
-	"white",
+	"#21242a", /* black   */
+	"#ff6c6b", /* red     */
+	"#98be65", /* green   */
+	"#ECBE7B", /* yellow  */
+	"#51afef", /* blue    */
+	"#a9a1e1", /* magenta */
+	"#46D9FF", /* cyan    */
+	"#efefef", /* white   */
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	"#cccccc",
-	"#555555",
-	"black",
+	"#282c34", /* background */
+	"#bbc2cf", /* foreground */
 };
 
 
@@ -155,10 +154,10 @@ static const char *colorname[] = {
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 7;
-unsigned int defaultbg = 258;
-static unsigned int defaultcs = 256;
-static unsigned int defaultrcs = 257;
+unsigned int defaultfg = 257;
+unsigned int defaultbg = 256;
+static unsigned int defaultcs = 257;
+static unsigned int defaultrcs = 256;
 
 /*
  * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h4-Functions-using-CSI-_-ordered-by-the-final-character-lparen-s-rparen:CSI-Ps-SP-q.1D81
