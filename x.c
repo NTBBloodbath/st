@@ -57,6 +57,7 @@ static void clipcopy(const Arg *);
 static void clippaste(const Arg *);
 static void numlock(const Arg *);
 static void selpaste(const Arg *);
+static void changealpha(const Arg *);
 static void zoom(const Arg *);
 static void zoomabs(const Arg *);
 static void zoomreset(const Arg *);
@@ -304,6 +305,22 @@ void
 numlock(const Arg *dummy)
 {
 	win.mode ^= MODE_NUMLOCK;
+}
+
+void
+changealpha(const Arg *arg)
+{
+    if (alpha > 1 && arg->f == 2 )
+      alpha = 1;
+    if ((alpha > 0 && arg->f < 0) || (alpha < 1 && arg->f > 0))
+        alpha += arg->f;
+    if (alpha < 0)
+        alpha = 0;
+    if (alpha > 1)
+        alpha = 1;
+
+    xloadcols();
+    redraw();
 }
 
 void

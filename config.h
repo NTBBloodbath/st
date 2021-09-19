@@ -8,11 +8,10 @@
 static char *font = "Iosevka Slab:pixelsize=14:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
-/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */
-/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */
+    "JetBrainsMono Nerd Font:pixelsize=14:antialias=true:autohint=true"
 };
 
-static int borderpx = 2;
+static int borderpx = 0;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -51,7 +50,7 @@ int allowaltscreen = 1;
 
 /* allow certain non-interactive (insecure) window operations such as:
    setting the clipboard text */
-int allowwindowops = 0;
+int allowwindowops = 1;
 
 /*
  * draw latency range in ms - from new content/keypress/etc until drawing.
@@ -72,7 +71,7 @@ static uint su_timeout = 200;
  * blinking timeout (set to 0 to disable blinking) for the terminal blinking
  * attribute.
  */
-static unsigned int blinktimeout = 800;
+static unsigned int blinktimeout = 500;
 
 /*
  * thickness of underline and bar cursors
@@ -86,7 +85,7 @@ static unsigned int cursorthickness = 2;
  * 0: disable (render all U25XX glyphs normally from the font).
  */
 const int boxdraw = 0;
-const int boxdraw_bold = 0;
+const int boxdraw_bold = 1;
 
 /* braille (U28XX):  1: render as adjacent "pixels",  0: use font */
 const int boxdraw_braille = 0;
@@ -115,32 +114,32 @@ char *termname = "st-256color";
  *
  *	stty tabs
  */
-unsigned int tabspaces = 8;
+unsigned int tabspaces = 4;
 
 /* bg opacity */
-float alpha = 0.8;
+float alpha = 0.85;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	"#1B2229", /* black   */
-	"#ff6c6b", /* red     */
-	"#98be65", /* green   */
-	"#ECBE7B", /* yellow  */
-	"#51afef", /* blue    */
-	"#a9a1e1", /* magenta */
-	"#46D9FF", /* cyan    */
-	"#efefef", /* white   */
+	"#3E4556", /* black   */
+	"#E56160", /* red     */
+	"#88AB6A", /* green   */
+	"#D4AB6E", /* yellow  */
+	"#4CA6E3", /* blue    */
+	"#c678dd", /* magenta */
+	"#3FC3E5", /* cyan    */
+	"#DFDFD9", /* white   */
 
 	/* 8 bright colors */
-	"#21242a", /* black   */
+	"#5B6268", /* black   */
 	"#ff6c6b", /* red     */
 	"#98be65", /* green   */
 	"#ECBE7B", /* yellow  */
 	"#51afef", /* blue    */
 	"#a9a1e1", /* magenta */
 	"#46D9FF", /* cyan    */
-	"#efefef", /* white   */
+	"#f8f8f2", /* white   */
 
 	[255] = 0,
 
@@ -172,15 +171,15 @@ static unsigned int defaultrcs = 256;
  * 7: Blinking st cursor
  * 8: Steady st cursor
  */
-static unsigned int cursorstyle = 1;
+static unsigned int cursorstyle = 5;
 static Rune stcursor = 0x2603; /* snowman (U+2603) */
 
 /*
  * Default columns and rows numbers
  */
 
-static unsigned int cols = 80;
-static unsigned int rows = 24;
+static unsigned int cols = 100;
+static unsigned int rows = 30;
 
 /*
  * Default colour and shape of the mouse cursor
@@ -225,7 +224,7 @@ MouseKey mkeys[] = {
 };
 
 /* Internal keyboard shortcuts. */
-#define MODKEY Mod1Mask
+#define MODKEY Mod1Mask /* Alt */
 #define TERMMOD (ControlMask|ShiftMask)
 
 static Shortcut shortcuts[] = {
@@ -234,9 +233,14 @@ static Shortcut shortcuts[] = {
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
 	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
-	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
-	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
+	{ MODKEY,               XK_Up,          zoom,           {.f = +1} },
+	{ MODKEY,               XK_Down,        zoom,           {.f = -1} },
+	{ MODKEY,               XK_BackSpace,   zoomreset,      {.f =  0} },
+	{ TERMMOD,              XK_Up,          zoom,           {.f = +1} },
+	{ TERMMOD,              XK_Down,        zoom,           {.f = -1} },
+	{ TERMMOD,              XK_K,           zoom,           {.f = +1} },
+	{ TERMMOD,              XK_J,           zoom,           {.f = -1} },
+	{ TERMMOD,              XK_BackSpace,   zoomreset,      {.f =  0} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
@@ -245,6 +249,13 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Return,      newterm,        {.i =  0} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
 	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ MODKEY,               XK_k,           kscrollup,      {.i =  1} },
+	{ MODKEY,               XK_j,           kscrolldown,    {.i =  1} },
+	{ MODKEY,               XK_Up,          kscrollup,      {.i =  1} },
+	{ MODKEY,               XK_Down,        kscrolldown,    {.i =  1} },
+	{ MODKEY,               XK_s,           changealpha,    {.f = -0.05} },
+	{ MODKEY,               XK_a,           changealpha,    {.f = +0.05} },
+	{ MODKEY,               XK_d,           changealpha,    {.f = +2.00} },
 };
 
 /*
