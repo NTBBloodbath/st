@@ -14,6 +14,7 @@ Just my personal st build.
 
 - Alpha (transparency)
 - anysize
+- anygeometry
 - appsync (Improve draw time, animation smoothness and reduce flickering/tearing)
 - blinking cursor
 - dynamic cursor color
