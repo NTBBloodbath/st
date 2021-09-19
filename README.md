@@ -33,6 +33,7 @@ Just my personal st build.
 - [patch_column](https://github.com/nimaipatel/st/blob/master/patches/7672445bab01cb4e861651dc540566ac22e25812.diff) (doesn't cut text while resizing)
 - title parsing fix
 - w3m
+- xclearwin
 
 > **NOTE**: ligatures needs `libharfbuzz-dev` to work!
 
