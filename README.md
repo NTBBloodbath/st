@@ -73,9 +73,7 @@ Because of the `OSC 10 11 12 (2)` patch, it's possible to use a tool like
 
 ### Known issues
 
-- When using `theme.sh` the background will not be transparent.
-- If you use the keybinds for the transparency, the theme will be replaced with
-  the default one (`doom-one`).
+Nothing here but chickens ...
 
 ## Installation
 
