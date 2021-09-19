@@ -8,7 +8,7 @@
 static char *font = "Iosevka Slab:pixelsize=12:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
-    "JetBrainsMono Nerd Font:pixelsize=14:antialias=true:autohint=true"
+    "JetBrainsMono Nerd Font:pixelsize=10:antialias=true:autohint=true"
 };
 
 static int borderpx = 0;
