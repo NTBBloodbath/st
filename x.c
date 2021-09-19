@@ -1231,12 +1231,9 @@ xinit(int cols, int rows)
 	Window parent;
 	pid_t thispid = getpid();
 	XColor xmousefg, xmousebg;
-<<<<<<<
 	XWindowAttributes attr;
 	XVisualInfo vis;
-=======
 	Pixmap blankpm;
->>>>>>>
 
 	if (!(xw.dpy = XOpenDisplay(NULL)))
 		die("can't open display\n");
