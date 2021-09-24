@@ -28,6 +28,8 @@
  #include <libutil.h>
 #endif
 
+#define DOUBLEFORKNEWTERM 1
+
 /* Arbitrary sizes */
 #define UTF_INVALID   0xFFFD
 #define UTF_SIZ       4
@@ -214,6 +216,9 @@ static void tstrsequence(uchar);
 
 static void drawregion(int, int, int, int);
 
+static void savepwd(const char *);
+static void setpwd(void);
+
 static void selnormalize(void);
 static void selscroll(int, int);
 static void selsnap(int *, int *, int);
@@ -233,6 +238,7 @@ static Term term;
 static Selection sel;
 static CSIEscape csiescseq;
 static STREscape strescseq;
+static char *pwd = NULL;
 static int iofd = 1;
 static int cmdfd;
 static pid_t pid;
@@ -763,8 +769,13 @@ sigchld(int a)
 	if ((p = waitpid(pid, &stat, WNOHANG)) < 0)
 		die("waiting for pid %hd failed: %s\n", pid, strerror(errno));
 
-	if (pid != p)
+	if (pid != p) {
+		int tmp = errno; /* waitpid might change errno */
+
+		while (waitpid(-1, NULL, WNOHANG) > 0);
+		errno = tmp;
 		return;
+	}
 
 	if (WIFEXITED(stat) && WEXITSTATUS(stat))
 		die("child exited with status %d\n", WEXITSTATUS(stat));
@@ -801,6 +812,7 @@ int
 ttynew(const char *line, char *cmd, const char *out, char **args)
 {
 	int m, s;
+	struct sigaction sa;
 
 	if (out) {
 		term.mode |= MODE_PRINT;
@@ -853,7 +865,10 @@ ttynew(const char *line, char *cmd, const char *out, char **args)
 #endif
 		close(s);
 		cmdfd = m;
-		signal(SIGCHLD, sigchld);
+		sa.sa_flags = SA_NOCLDSTOP | SA_RESTART;
+		sigemptyset(&sa.sa_mask);
+		sa.sa_handler = sigchld;
+		sigaction(SIGCHLD, &sa, NULL);
 		break;
 	}
 	return cmdfd;
@@ -1112,6 +1127,26 @@ tswapscreen(void)
 }
 
 void
+savepwd(const char *s)
+{
+	free(pwd);
+	pwd = xstrdup(s);
+}
+
+void
+setpwd(void)
+{
+	if (!pwd)
+		return;
+	if (chdir(pwd) == -1) {
+		fprintf(stderr, "Error changing directory to %s: %s\n",
+				pwd, strerror(errno));
+		return;
+	}
+	setenv("PWD", pwd, 1);
+}
+
+void
 newterm(const Arg* a)
 {
 	switch (fork()) {
@@ -1119,8 +1154,27 @@ newterm(const Arg* a)
 		die("fork failed: %s\n", strerror(errno));
 		break;
 	case 0:
-		chdir(getcwd_by_pid(pid));
-		execlp("st", "./st", NULL);
+		if (iofd != -1 && iofd != 1)
+			close(iofd);
+		close(cmdfd);
+#if DOUBLEFORKNEWTERM
+		switch (fork()) {
+		case -1:
+			die("fork failed: %s\n", strerror(errno));
+			break;
+		case 0:
+#endif
+		setsid();
+		setpwd();
+		execlp("st", "st", (char *)NULL);
+		die("execlp failed: %s\n", strerror(errno));
+		_exit(1);
+		break;
+#if DOUBLEFORKNEWTERM
+		default:
+			exit(0);
+		}
+#endif
 		break;
 	}
 }
@@ -2022,6 +2076,10 @@ strhandle(void)
 			if (narg > 1)
 				xsettitle(STRESCARGREST(1), 0);
 			return;
+		case 7:
+		    if (narg > 1)
+		        savepwd(STRESCARGREST(1));
+		    return;
 		case 52:
 			if (narg > 2 && allowwindowops) {
 				dec = base64dec(STRESCARGJUST(2));
