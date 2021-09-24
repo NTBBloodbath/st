@@ -774,6 +774,9 @@ cresize(int width, int height)
 	col = MAX(1, col);
 	row = MAX(1, row);
 
+	win.hborderpx = (win.w - col * win.cw) / 2;
+	win.vborderpx = (win.h - row * win.ch) / 2;
+
 	tresize(col, row);
 	xresize(col, row);
 	ttyresize(win.tw, win.th);
@@ -1311,8 +1314,8 @@ xinit(int w, int h)
 	/* adjust fixed window geometry */
 	switch (geometry) {
 	case CellGeometry:
-		win.w = 2 * borderpx + w * win.cw;
-		win.h = 2 * borderpx + h * win.ch;
+		win.w = 2 * win.hborderpx + 2 * borderpx + w * win.cw;
+		win.h = 2 * win.vborderpx + 2 * borderpx + h * win.ch;
 		break;
 	case PixelGeometry:
 		win.w = w;
