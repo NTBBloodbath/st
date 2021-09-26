@@ -2116,7 +2116,7 @@ strhandle(void)
 			return;
 		case 7:
 		    if (narg > 1)
-		        savepwd(STRESCARGREST(1));
+		        savepwd(STRESCARGJUST(1));
 		    return;
 		case 52:
 			if (narg > 2 && allowwindowops) {
