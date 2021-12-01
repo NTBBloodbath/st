@@ -2,10 +2,13 @@
 #include <stdio.h>
 #include <math.h>
 #include <X11/Xft/Xft.h>
+#include <X11/cursorfont.h>
 #include <hb.h>
 #include <hb-ft.h>
 
 #include "st.h"
+
+#define FEATURE(c1,c2,c3,c4) { .tag = HB_TAG(c1,c2,c3,c4), .value = 1, .start = HB_FEATURE_GLOBAL_START, .end = HB_FEATURE_GLOBAL_END }
 
 void hbtransformsegment(XftFont *xfont, const Glyph *string, hb_codepoint_t *codepoints, int start, int length);
 hb_font_t *hbfindfont(XftFont *match);
@@ -17,6 +20,33 @@ typedef struct {
 
 static int hbfontslen = 0;
 static HbFontMatch *hbfontcache = NULL;
+
+/* 
+ * Replace 0 with a list of font features, wrapped in FEATURE macro, e.g. 
+ * FEATURE('c', 'a', 'l', 't'), FEATURE('d', 'l', 'i', 'g')
+ * 
+ * NOTE: my features are for FiraCode
+ */
+hb_feature_t features[] = {
+    FEATURE('s', 's', '0', '1'), // Sans-serif r
+    FEATURE('s', 's', '0', '2'), // Less than/greater than with horizontal bar
+    FEATURE('s', 's', '0', '3'), // Traditional ampersand
+    FEATURE('s', 's', '0', '4'), // Lightweight dollar sign
+    FEATURE('s', 's', '0', '5'), // Traditional at sign
+    FEATURE('s', 's', '0', '6'), // Thin backslash
+    FEATURE('s', 's', '0', '7'), // Regexp matching operator
+    FEATURE('s', 's', '0', '8'), // Gaps in double/triple equals
+    FEATURE('s', 's', '0', '9'), // Compound assignments
+    FEATURE('s', 's', '1', '0'), // Full ligatures
+    FEATURE('c', 'v', '1', '4'), // 3 with flat top
+    FEATURE('c', 'v', '1', '8'), // Percent with filled dots
+    FEATURE('c', 'v', '1', '9'), // Left arrow with horizontal bar (< =)
+    FEATURE('c', 'v', '2', '2'), // LTE with horizontal bar (= <)
+    FEATURE('c', 'v', '2', '3'), // GTE with horizontal bar (> =)
+    FEATURE('c', 'v', '2', '7'), // Box square brackets
+    FEATURE('c', 'v', '2', '9'), // Rounded curly braces
+    FEATURE('c', 'v', '3', '1'), // Brackets (parenthesis)
+};
 
 void
 hbunloadfonts()
@@ -59,7 +89,7 @@ void
 hbtransform(XftGlyphFontSpec *specs, const Glyph *glyphs, size_t len, int x, int y)
 {
 	int start = 0, length = 1, gstart = 0;
-	hb_codepoint_t *codepoints = calloc(len, sizeof(hb_codepoint_t));
+	hb_codepoint_t *codepoints = calloc((unsigned int)len, sizeof(hb_codepoint_t));
 
 	for (int idx = 1, specidx = 1; idx < len; idx++) {
 		if (glyphs[idx].mode & ATTR_WDUMMY) {
@@ -120,7 +150,7 @@ hbtransformsegment(XftFont *xfont, const Glyph *string, hb_codepoint_t *codepoin
 	}
 
 	/* Shape the segment. */
-	hb_shape(font, buffer, NULL, 0);
+	hb_shape(font, buffer, features, sizeof(features));
 
 	/* Get new glyph info. */
 	hb_glyph_info_t *info = hb_buffer_get_glyph_infos(buffer, NULL);

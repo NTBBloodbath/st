@@ -117,22 +117,22 @@ char *termname = "st-256color";
 unsigned int tabspaces = 4;
 
 /* bg opacity */
-float alpha = 0.85;
+float alpha = 0.9;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	"#1b1e21",
+	"#3f444a",
 	"#f46a66",
 	"#a0ba65",
 	"#e2b269",
 	"#67aec9",
 	"#cc7fbc",
 	"#67c6c0",
-	"#868c96",
+	"#5b6268",
 
 	/* 8 bright colors */
-	"#282d32",
+	"#3f444a",
 	"#f46a66",
 	"#a0ba65",
 	"#e2b269",
@@ -146,7 +146,7 @@ static const char *colorname[] = {
 	/* more colors can be added after 255 to use with DefaultXX */
 	"#22262a",
 	"#c7c0b3",
-	"black",
+	//"black",
 };
 
 /*
@@ -156,7 +156,7 @@ static const char *colorname[] = {
 unsigned int defaultfg = 257;
 unsigned int defaultbg = 256;
 unsigned int defaultcs = 257;
-static unsigned int defaultrcs = 256;
+static unsigned int defaultrcs = 15;
 
 /*
  * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h4-Functions-using-CSI-_-ordered-by-the-final-character-lparen-s-rparen:CSI-Ps-SP-q.1D81
