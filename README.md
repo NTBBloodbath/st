@@ -54,7 +54,7 @@ Just my personal st build.
 | Inc. transparency  | `Alt` + `a`                                                |
 | Dec. transparency  | `Alt` + `s`                                                |
 | Reset transparency | `Alt` + `d`                                                |
-| Open new terminal  | `Control` + `Shift` + `Return`                               |
+| Open new terminal  | `Control` + `Shift` + `R`                                  |
 
 ### Mouse
 
