@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Iosevka Slab:pixelsize=12:antialias=true:autohint=true";
+static char *font = "Fira Code Retina:pixelsize=12:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
     "JetBrainsMono Nerd Font:pixelsize=10:antialias=true:autohint=true"
@@ -122,34 +122,32 @@ float alpha = 0.85;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	"#3E4556", /* black   */
-	"#E56160", /* red     */
-	"#88AB6A", /* green   */
-	"#D4AB6E", /* yellow  */
-	"#4CA6E3", /* blue    */
-	"#c678dd", /* magenta */
-	"#3FC3E5", /* cyan    */
-	"#DFDFD9", /* white   */
+	"#1b1e21",
+	"#f46a66",
+	"#a0ba65",
+	"#e2b269",
+	"#67aec9",
+	"#cc7fbc",
+	"#67c6c0",
+	"#868c96",
 
 	/* 8 bright colors */
-	"#5B6268", /* black   */
-	"#ff6c6b", /* red     */
-	"#98be65", /* green   */
-	"#ECBE7B", /* yellow  */
-	"#51afef", /* blue    */
-	"#a9a1e1", /* magenta */
-	"#46D9FF", /* cyan    */
-	"#f8f8f2", /* white   */
+	"#282d32",
+	"#f46a66",
+	"#a0ba65",
+	"#e2b269",
+	"#67aec9",
+	"#be93be",
+	"#67c6c0",
+	"#e6dbc5",
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	"#282c34", /* background */
-	"#bbc2cf", /* foreground */
+	"#22262a",
+	"#c7c0b3",
 	"black",
-	"gray90",
 };
-
 
 /*
  * Default colors (colorname index)
